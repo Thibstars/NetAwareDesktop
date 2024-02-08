@@ -1,7 +1,6 @@
 package com.github.thibstars.netaware.desktop;
 
 import com.github.thibstars.netaware.events.IpAddressFoundEvent;
-import com.github.thibstars.netaware.events.IpScannerEvent;
 import com.github.thibstars.netaware.events.core.EventManager;
 import com.github.thibstars.netaware.scanners.IpScanner;
 import com.github.thibstars.netaware.scanners.IpScannerInput;
@@ -11,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainFrame extends JFrame {
 
-    private final JTable resultTable;
     private final DefaultTableModel tableModel;
 
     public MainFrame() throws HeadlessException {
@@ -29,10 +28,10 @@ public class MainFrame extends JFrame {
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("IP Address");
-        resultTable = new JTable(tableModel);
+        JTable resultTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(resultTable);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         JPanel mainPanel = new JPanel();
         mainPanel.setSize(dimension);
         mainPanel.add(scrollPane);
