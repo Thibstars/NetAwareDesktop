@@ -21,6 +21,7 @@ public class MainFrame extends JFrame {
     private final DefaultTableModel tableModel;
 
     public MainFrame() throws HeadlessException {
+        setTitle("NetAware Desktop");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Dimension dimension = new Dimension(750, 500);
         setSize(dimension);
