@@ -8,10 +8,13 @@ import com.github.thibstars.netaware.scanners.IpScanner;
 import com.github.thibstars.netaware.scanners.IpScannerInput;
 import com.github.thibstars.netaware.scanners.MacScanner;
 import com.github.thibstars.netaware.scanners.PortScanner;
+import com.github.thibstars.netaware.utils.OptimalThreadPoolSizeCalculator;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -93,9 +96,6 @@ public class MainFrame extends JFrame {
         PortScanner portScanner = new PortScanner(eventManager);
         MacScanner macScanner = new MacScanner(eventManager);
 
-        String firstIpInTheNetwork = "192.168.1.0";
-        int amountOfIpsToScan = 254;
-
         eventManager.registerHandler(
                 IpAddressFoundEvent.class,
                 event -> {
@@ -109,7 +109,34 @@ public class MainFrame extends JFrame {
                 });
 
         iPProgressBar.setVisible(true);
-        ipScanner.scan(new IpScannerInput(firstIpInTheNetwork, amountOfIpsToScan));
+
+        OptimalThreadPoolSizeCalculator optimalThreadPoolSizeCalculator = new OptimalThreadPoolSizeCalculator();
+        int optimalThreadPoolSize = optimalThreadPoolSizeCalculator.get(0.9, 1000, 2);
+        try (ExecutorService executorService = Executors.newFixedThreadPool(optimalThreadPoolSize)) {
+            executorService.submit(() -> {
+                String classABase = "10.0.";
+                int amountOfIpsToScan = 255;
+                for (int i = 0; i < amountOfIpsToScan; i++) {
+                    ipScanner.scan(new IpScannerInput(classABase + i + ".0", amountOfIpsToScan));
+                }
+            });
+            executorService.submit(() -> {
+                String classBBase = "172.16.";
+                int amountOfIpsToScan = 255;
+                for (int i = 0; i < 16; i++) {
+                    ipScanner.scan(new IpScannerInput(classBBase + i + ".0", amountOfIpsToScan));
+                }
+            });
+            executorService.submit(() -> {
+                String classCBase = "192.168.";
+                int amountOfIpsToScan = 255;
+                for (int i = 0; i < amountOfIpsToScan; i++) {
+                    ipScanner.scan(new IpScannerInput(classCBase + i + ".0", amountOfIpsToScan));
+                }
+            });
+            executorService.shutdown();
+        }
+
         iPProgressBar.setVisible(false);
     }
 }
