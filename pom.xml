@@ -13,7 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <netaware.version>1.0-SNAPSHOT</netaware.version>
+        <netaware.version>1.0</netaware.version>
     </properties>
 
     <dependencies>
@@ -23,5 +23,12 @@
             <version>${netaware.version}</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
 </project>
